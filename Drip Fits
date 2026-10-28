@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>DRIP fits</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#0b0b12;--card:#181822;--lime:#b6ff3b;--pink:#ff3ea5;--blue:#35a6ff;--mut:#8a8a99;--c:#8a8a99;--r:#35a6ff;--e:#a35bff;--l:#ffa82e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%;margin:0}
+body{background:var(--bg) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='56'><text x='4' y='40' font-size='34' opacity='.13'>🎃</text></svg>");color:#fff;font:500 15px/1.35 system-ui,Roboto,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+header{padding:calc(10px + env(safe-area-inset-top,0px)) 14px 4px;text-align:center;position:relative}
+#bal{font-size:40px;font-weight:800;color:var(--lime);letter-spacing:-.5px}
+#sub{font-size:12.5px;color:var(--mut)}
+#ttl{display:inline-block;margin:6px 0 4px;padding:4px 12px;border-radius:14px;background:#ffffff14;color:var(--pink);font-weight:700;font-size:14px}
+#lv{font-size:13px;color:#ddd}
+.xp{height:7px;background:#ffffff1f;border-radius:4px;margin:5px auto 0;max-width:420px;overflow:hidden}.xp i{display:block;height:100%;background:var(--blue);width:0}
+main{flex:1;overflow-y:auto;padding:10px 14px 14px;position:relative}
+nav{display:flex;background:#12121aee;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));gap:2px}
+nav button{flex:1;border:0;background:none;color:#cfcfd8;font:600 10.5px system-ui;padding:8px 0;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button span{font-size:16px}nav button.on{background:#ffffff14;color:var(--lime)}
+.tapwrap{display:flex;justify-content:center;margin:10px 0 16px;position:relative;min-height:min(72vw,300px)}
+#tap{width:min(72vw,300px);height:min(72vw,300px);border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#d8ff7a,#b6ff3b 55%,#8fdc1a);box-shadow:0 0 70px #b6ff3b66;font-size:min(34vw,140px);font-weight:900;color:#14140a;touch-action:manipulation;transition:transform .07s}
+#tap:active{transform:scale(.95)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.b{border:0;border-radius:16px;background:var(--card);color:#fff;padding:12px 8px;text-align:center;font:inherit;display:block;width:100%}
+.b b{display:block;font-size:15px}.b small{color:#cfcfd8;font-size:13px}
+.b.lime{background:var(--lime);color:#111}.b.lime small{color:#222}.b.pink{background:var(--pink);font-weight:700;font-size:16px}
+.b.sm{width:auto;min-width:96px;padding:12px 14px;font-weight:700}
+.wide{margin:12px 0}
+.promo{display:flex;gap:10px}.promo input{flex:1;min-width:0;border:0;border-radius:16px;background:var(--card);color:#fff;padding:14px;font:inherit;text-transform:uppercase}
+.note{text-align:center;color:var(--mut);font-size:13px;margin:12px 0 0}
+.h{color:var(--mut);font-weight:700;letter-spacing:.5px;margin:6px 2px 10px;text-transform:uppercase;font-size:14px}
+.row{background:var(--card);border-radius:18px;padding:10px 12px;margin:0 0 10px;display:flex;align-items:center;gap:12px}
+.row .g{flex:1;min-width:0}.row .g b{display:block}.row .g small{color:var(--mut)}
+.ic{width:54px;height:54px;background:#ffffff0f;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;font-size:30px}
+.ic svg{width:40px;height:40px}
+.me{outline:2px solid var(--lime);background:#1b2410}
+.tabs{display:flex;gap:8px;margin-bottom:10px}.tabs button{flex:1;border:0;border-radius:14px;background:var(--card);color:#fff;padding:12px 0;font:600 13px system-ui}.tabs button.on{background:var(--lime);color:#111}
+.filters{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+select,.search{border:0;border-radius:14px;background:var(--card);color:#fff;padding:12px 8px;font:inherit;width:100%;min-width:0}
+.search{margin-bottom:10px}
+.q{color:var(--mut);font-size:13px}
+.rc{color:var(--c)}.rr{color:var(--r)}.re{color:var(--e)}.rl{color:var(--l)}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cell{border:2px solid var(--c);border-radius:18px;padding:8px;text-align:center;font-size:12px;background:#12182a}
+.cell svg{width:100%;height:84px;display:block;margin-bottom:4px}
+.cell.lock{opacity:.35;filter:grayscale(1)}
+.cell.r{border-color:var(--r)}.cell.e{border-color:var(--e)}.cell.l{border-color:var(--l)}
+.stand{display:grid;grid-template-columns:42% 1fr;gap:10px}
+.man{background:var(--card);border-radius:20px;padding:6px}.man svg{width:100%;height:auto;display:block}
+.slot{display:flex;align-items:center;gap:10px;background:var(--card);border:0;border-radius:18px;color:#fff;padding:9px 10px;margin-bottom:8px;width:100%;text-align:left;font:inherit}
+.slot .p{width:38px;height:38px;border-radius:11px;background:#ffffff12;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.slot .p svg{width:30px;height:30px}.slot b{display:block;font-size:14px}.slot small{color:var(--mut);font-size:12px;display:block;line-height:1.2}
+.bar{height:10px;background:#ffffff1f;border-radius:5px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--lime)}
+.ov{position:fixed;inset:0;background:#000b;display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.mod{background:#14141d;width:100%;max-width:520px;max-height:80%;overflow-y:auto;border-radius:24px 24px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom,0px))}
+.big{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin-bottom:12px}.big svg{width:120px;height:120px}
+.fl{position:fixed;pointer-events:none;font:800 22px system-ui;color:var(--lime);animation:up .8s forwards;z-index:9;text-shadow:0 2px 6px #000}
+.fl.crit{color:var(--pink);font-size:30px}
+@keyframes up{to{transform:translateY(-90px);opacity:0}}
+.coin{position:absolute;width:54px;height:54px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#fff2a8,#ffc21a);font-size:26px;box-shadow:0 0 24px #ffc21a99;z-index:5;animation:pop .4s}
+@keyframes pop{from{transform:scale(0)}}
+.toast{position:fixed;left:50%;top:calc(80px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#fff;color:#111;padding:10px 16px;border-radius:14px;font-weight:700;z-index:30;max-width:88%;text-align:center}
+@media (prefers-reduced-motion:reduce){.fl,.coin{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <div id="bal">0 ₽</div>
+  <div id="sub"></div>
+  <div id="ttl"></div>
+  <div id="lv"></div>
+  <div class="xp"><i id="xpb"></i></div>
+</header>
+<main id="view"></main>
+<nav id="nav"></nav>
+
+<script>
+// ===== НАСТРОЙКИ =====
+const API = '';  // адрес бэкенда для общего топа, пусто = демо-топ
+const BOT_LINK = 'https://t.me/YOUR_BOT/app'; // ссылка на твою игру
+const PROMOS = { DRIP: 5000, HALLOWEEN: 25000 };
+
+// ===== TELEGRAM =====
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { try { tg.ready(); tg.expand(); tg.setHeaderColor('#0b0b12'); tg.setBackgroundColor('#0b0b12'); } catch (e) {} }
+const tu = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
+const NAME = tu.username ? '@' + tu.username : (tu.first_name || 'Игрок');
+const hap = t => { try { tg.HapticFeedback.impactOccurred(t || 'light'); } catch (e) {} };
+
+// ===== КАТАЛОГ ВЕЩЕЙ =====
+const TYPES = [['head', 'Голова'], ['face', 'Лицо'], ['neck', 'Шея'], ['top', 'Верх'], ['bottom', 'Низ'], ['shoes', 'Обувь'], ['bag', 'Сумка'], ['watch', 'Часы']];
+const NOUNS = { head: [['Кепка', 1], ['Панама', 1]], face: [['Очки', 3], ['Маска', 1]], neck: [['Цепь', 1], ['Шарф', 0]], top: [['Худи', 2], ['Футболка', 1], ['Куртка', 1]],
+  bottom: [['Штаны', 3], ['Джинсы', 3], ['Шорты', 3]], shoes: [['Кроссовки', 3], ['Ботинки', 3]], bag: [['Сумка', 1], ['Рюкзак', 0]], watch: [['Часы', 3]] };
+const COLORS = [['зелёный', 'зелёная', 'зелёное', 'зелёные', '#2e9d4f'], ['белый', 'белая', 'белое', 'белые', '#f1f1f1'], ['чёрный', 'чёрная', 'чёрное', 'чёрные', '#222'],
+  ['красный', 'красная', 'красное', 'красные', '#d8323c'], ['серый', 'серая', 'серое', 'серые', '#8d8d99'], ['жёлтый', 'жёлтая', 'жёлтое', 'жёлтые', '#f2c923'],
+  ['фиолетовый', 'фиолетовая', 'фиолетовое', 'фиолетовые', '#8a4fe0'], ['бирюзовый', 'бирюзовая', 'бирюзовое', 'бирюзовые', '#21c4b8']];
+const WORDS = ['Байкер', 'Асфальт', 'Сокол', 'Пантера', 'Орбита', 'Гром', 'Дым', 'Район'];
+const BRANDS = ['', 'Nike', 'Adidas', 'Supreme', 'Balenciaga', 'Versace', 'Chrome Hearts'];
+const RAR = ['c', 'r', 'e', 'l'], RN = { c: 'Обычная', r: 'Редкая', e: 'Эпик', l: 'Легенда' };
+const RP = { c: [260, 340], r: [2500, 4000], e: [20000, 40000], l: [150000, 300000] }, RB = { c: 1, r: 3, e: 8, l: 20 };
+const ITEMS = [];
+(function () {
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  TYPES.forEach(([t]) => NOUNS[t].forEach(([n, g]) => BRANDS.forEach((b, bi) => COLORS.forEach((c, ci) => {
+    const r = bi === 0 ? 'c' : bi < 3 ? 'r' : bi < 5 ? 'e' : 'l', pr = RP[r];
+    ITEMS.push({ id: ITEMS.length, t, r, b, col: c[4], p: Math.round((pr[0] + rnd() * (pr[1] - pr[0])) / 10) * 10,
+      n: n + (b ? ' ' + b : '') + ' «' + WORDS[(ci + bi) % 8] + '» ' + c[g] });
+  }))));
+})();
+const CASES = [
+  { n: 'Уличный кейс', p: 5000, ic: '📦', o: { c: 70, r: 25, e: 5 } },
+  { n: 'Дрип-кейс', p: 25000, ic: '🎁', o: { c: 30, r: 45, e: 22, l: 3 } },
+  { n: 'Люкс-кейс', p: 120000, ic: '💎', o: { r: 20, e: 60, l: 20 } }];
+
+// ===== ИКОНКИ =====
+function paths(it) {
+  const c = it.col, d = '#0006';
+  let p;
+  switch (it.t) {
+    case 'head': p = `<path d="M14 62Q18 24 52 24Q84 24 88 62Z" fill="${c}"/><path d="M60 62H96Q96 70 84 70H60Z" fill="#2a4a9a"/><circle cx="52" cy="22" r="4" fill="#fff"/>`; break;
+    case 'face': p = `<rect x="10" y="36" width="35" height="26" rx="8" fill="${c}"/><rect x="55" y="36" width="35" height="26" rx="8" fill="${c}"/><path d="M45 46H55" stroke="${c}" stroke-width="4"/>`; break;
+    case 'neck': p = `<path d="M22 14Q50 84 78 14" fill="none" stroke="${c}" stroke-width="7"/><circle cx="50" cy="66" r="11" fill="${c}"/>`; break;
+    case 'top': p = `<path d="M30 12L6 34L22 48L30 42V90H70V42L78 48L94 34L70 12Q50 28 30 12Z" fill="${c}"/><rect x="36" y="62" width="28" height="18" rx="3" fill="${d}"/>`; break;
+    case 'bottom': p = `<path d="M26 8H74L80 92H56L50 40L44 92H20Z" fill="${c}"/><rect x="26" y="8" width="48" height="9" fill="${d}"/>`; break;
+    case 'shoes': p = `<path d="M10 56L38 46L54 60H90Q95 74 82 78H14Q8 76 10 56Z" fill="${c}"/><rect x="10" y="72" width="84" height="8" rx="4" fill="#fff"/>`; break;
+    case 'bag': p = `<path d="M30 40Q30 8 50 8Q70 8 70 40" fill="none" stroke="${d}" stroke-width="6"/><rect x="14" y="38" width="72" height="50" rx="8" fill="${c}"/>`; break;
+    default: p = `<rect x="38" y="4" width="24" height="92" rx="6" fill="${c}"/><circle cx="50" cy="50" r="26" fill="#14203a" stroke="#ddd" stroke-width="5"/><path d="M50 50V34M50 50L62 56" stroke="#fff" stroke-width="3"/>`;
+  }
+  if (it.b && it.t !== 'watch' && it.t !== 'face') p += `<circle cx="50" cy="${it.t === 'bottom' ? 30 : 58}" r="10" fill="#fff"/><text x="50" y="${it.t === 'bottom' ? 34 : 62}" font-size="12" font-weight="800" text-anchor="middle" fill="#111">${it.b[0]}</text>`;
+  return p;
+}
+const icon = it => `<svg viewBox="0 0 100 100">${paths(it)}</svg>`;
+
+// ===== СОСТОЯНИЕ =====
+const KEY = 'dripfits_v2';
+const fresh = () => ({ m: 1000, earned: 0, xp: 0, taps: 0, tl: 0, al: 0, boost: 0, streak: 0, daily: '', own: {}, eq: {}, cases: 0, promo: {}, ev: {}, t: Date.now() });
+let S = (function () { try { const o = JSON.parse(localStorage.getItem(KEY)); return Object.assign(fresh(), o || {}); } catch (e) { return fresh(); } })();
+function save() {
+  S.t = Date.now();
+  const s = JSON.stringify(S);
+  try { localStorage.setItem(KEY, s); } catch (e) {}
+  try { tg.CloudStorage.setItem(KEY, s); } catch (e) {}
+}
+if (tg && tg.CloudStorage) { try { tg.CloudStorage.getItem(KEY, (err, v) => { if (!err && v) { try { const c = JSON.parse(v); if (c.earned > S.earned) { S = Object.assign(fresh(), c); render(); } } catch (e) {} } }); } catch (e) {} }
+
+// ===== РАСЧЁТЫ =====
+const $ = s => document.querySelector(s);
+const N = n => Math.floor(n).toLocaleString('ru-RU');
+const R = n => N(n) + ' ₽';
+const need = l => 40 * l - 20;
+function lvl() { let l = 1, x = S.xp; while (x >= need(l)) { x -= need(l); l++; } return { l, x, n: need(l) }; }
+const ttl = l => l >= 20 ? 'Император дрипа' : l >= 3 ? 'Король дрипа' : 'Новичок';
+const owned = () => ITEMS.filter(i => S.own[i.id]);
+const lookBonus = () => TYPES.reduce((a, [t]) => a + (S.eq[t] != null ? RB[ITEMS[S.eq[t]].r] : 0), 0);
+const lookCost = () => TYPES.reduce((a, [t]) => a + (S.eq[t] != null ? ITEMS[S.eq[t]].p : 0), 0);
+const collVal = () => owned().reduce((a, i) => a + i.p, 0);
+const boosted = () => S.boost > Date.now();
+const mult = () => (1 + lookBonus() / 100) * (boosted() ? 2 : 1);
+const tapPow = (l = S.tl) => 1 + l;
+const tapCost = () => Math.floor(40 * Math.pow(1.38, S.tl));
+const autoCost = () => Math.floor(100 * Math.pow(1.42, S.al));
+const ips = () => S.al * 3 * mult();
+function earn(n) { S.m += n; S.earned += n; }
+function addXp(n) { const a = lvl().l; S.xp += n; const b = lvl().l; if (b > a) toast('Новый уровень дрипа: ' + b); }
+function toast(t) { const e = document.createElement('div'); e.className = 'toast'; e.textContent = t; document.body.appendChild(e); setTimeout(() => e.remove(), 2300); }
+const today = () => new Date().toISOString().slice(0, 10);
+
+const ACH = [
+  ['Первые 100 тапов', () => S.taps, 100], ['1 000 тапов', () => S.taps, 1000], ['10 000 тапов', () => S.taps, 10000],
+  ['10 вещей в коллекции', () => owned().length, 10], ['50 вещей в коллекции', () => owned().length, 50], ['150 вещей в коллекции', () => owned().length, 150],
+  ['10 кейсов', () => S.cases, 10], ['Уровень 10', () => lvl().l, 10], ['Миллион ₽ заработано', () => S.earned, 1e6]];
+const achDone = () => ACH.filter(a => a[1]() >= a[2]).length;
+
+// доход за время отсутствия, максимум 3 часа
+(function () {
+  const sec = Math.min((Date.now() - S.t) / 1000, 10800), g = Math.floor(sec * S.al * 3 * (1 + lookBonus() / 100));
+  if (g > 0) { earn(g); setTimeout(() => toast('Пока тебя не было: +' + R(g)), 500); }
+})();
+
+// ===== ШАПКА =====
+function head() {
+  const L = lvl();
+  $('#bal').textContent = R(S.m);
+  $('#sub').textContent = '+' + ips().toFixed(1) + ' ₽/сек · Коллекция: ' + R(collVal()) + (boosted() ? ' · ⚡x2 ' + Math.ceil((S.boost - Date.now()) / 1000) + 'с' : '');
+  $('#ttl').textContent = '🔥 ' + ttl(L.l) + ' · ' + NAME;
+  $('#lv').innerHTML = '💧 Уровень дрипа <b>' + L.l + '</b> · ' + L.x + '/' + L.n + ' XP';
+  $('#xpb').style.width = L.x / L.n * 100 + '%';
+}
+
+// ===== ЭКРАНЫ =====
+const TABS = [['tap', '👆', 'Тап'], ['shop', '🛍️', 'Магазин'], ['cases', '🎁', 'Кейсы'], ['stand', '🧍', 'Стенд'], ['coll', '👑', 'Коллекция'], ['top', '🏆', 'Топ'], ['event', '🎃', 'Ивент']];
+let tab = 'tap';
+const UI = { type: '', rar: '', sort: 'asc', q: '', shopN: 30, collN: 30, top: 'clothes' };
+$('#nav').innerHTML = TABS.map(t => `<button data-act="tab" data-v="${t[0]}"><span>${t[1]}</span>${t[2]}</button>`).join('');
+
+function tapView() {
+  return `<div class="tapwrap" id="tw"><button id="tap" aria-label="Тап">₽</button></div>
+  <div class="grid2">
+  <button class="b lime" data-act="up"><b>Усилить тап</b><small>+${tapPow(S.tl + 1)} ₽ · ${R(tapCost())} (ур. ${S.tl + 1})</small></button>
+  <button class="b" data-act="auto"><b>🤖 Автотап ур. ${S.al}</b><small>${R(autoCost())}</small></button>
+  <button class="b" data-act="boost"><b>⚡ Буст x2 · 60 сек</b><small>2 000 ₽</small></button>
+  <button class="b" data-act="daily"><b>🎁 Бонус дня</b><small>серия: ${S.streak} дн.</small></button></div>
+  <button class="b pink wide" data-act="share">📣 Похвастаться</button>
+  <div class="promo"><input id="promo" placeholder="ПРОМОКОД" maxlength="20"><button class="b lime sm" data-act="promo">Ввести</button></div>
+  <p class="note" id="tn"></p>`;
+}
+function tapNote() {
+  const e = $('#tn'); if (e) e.innerHTML = 'За тап: ' + R(tapPow() * mult()) + ' · Авто: ' + R(ips()) + '/сек<br>Шанс крита 6% (x5). Лови золотые монеты 💰';
+}
+function shopList() {
+  let a = ITEMS.filter(i => (i.r === 'c' || i.r === 'r') && !S.own[i.id]);
+  if (UI.type) a = a.filter(i => i.t === UI.type);
+  if (UI.rar) a = a.filter(i => i.r === UI.rar);
+  if (UI.q) a = a.filter(i => i.n.toLowerCase().includes(UI.q.toLowerCase()));
+  a.sort((x, y) => UI.sort === 'asc' ? x.p - y.p : y.p - x.p);
+  const s = a.slice(0, UI.shopN);
+  return (s.length ? s.map(i => `<div class="row"><div class="ic">${icon(i)}</div><div class="g"><b>${i.n}</b><small>${RN[i.r]} · ${R(i.p)}</small></div><button class="b lime sm" data-act="buy" data-id="${i.id}">Купить</button></div>`).join('') : '<p class="note">Ничего не найдено</p>') +
+    (a.length > s.length ? '<button class="b wide" data-act="more" data-v="shopN">Показать ещё</button>' : '');
+}
+function shopView() {
+  const o = (v, t, c) => `<option value="${v}" ${c === v ? 'selected' : ''}>${t}</option>`;
+  return `<div class="filters"><select data-f="type">${o('', 'Все вещи', UI.type)}${TYPES.map(t => o(t[0], t[1], UI.type)).join('')}</select>
+  <select data-f="rar">${o('', 'Любая редкость', UI.rar)}${o('c', 'Обычная', UI.rar)}${o('r', 'Редкая', UI.rar)}</select>
+  <select data-f="sort">${o('asc', 'Сначала дешёвые', UI.sort)}${o('desc', 'Сначала дорогие', UI.sort)}</select></div>
+  <input class="search" data-f="q" placeholder="Поиск" value="${UI.q.replace(/"/g, '')}"><div id="sl">${shopList()}</div>`;
+}
+function casesView() {
+  return '<div class="h">Кейсы с вещами</div>' + CASES.map((c, i) => `<div class="row"><div class="ic">${c.ic}</div><div class="g"><b>${c.n}</b><small>${R(c.p)}</small><div class="q">${RAR.filter(r => c.o[r]).map(r => `<span class="r${r}">${RN[r]} ${c.o[r]}%</span>`).join(' · ')}</div></div><button class="b lime sm" data-act="case" data-i="${i}">Открыть</button></div>`).join('') +
+    `<p class="note">Открыто кейсов: ${S.cases}. Выпадает вещь, которой у тебя ещё нет, она может стоить дороже кейса!</p>`;
+}
+function manSvg() {
+  const pos = { head: [62, 8, 76, 52], face: [72, 40, 56, 30], neck: [72, 78, 56, 56], top: [46, 84, 108, 108], bottom: [56, 186, 88, 110], shoes: [50, 290, 100, 44], bag: [136, 150, 56, 56], watch: [20, 150, 30, 46] };
+  let s = '<svg viewBox="0 0 200 340"><ellipse cx="100" cy="332" rx="70" ry="6" fill="#0008"/><circle cx="100" cy="52" r="26" fill="#4a4a5c"/><path d="M60 86H140L134 190H66Z" fill="#4a4a5c"/><rect x="66" y="188" width="30" height="104" rx="8" fill="#4a4a5c"/><rect x="104" y="188" width="30" height="104" rx="8" fill="#4a4a5c"/><rect x="34" y="90" width="16" height="84" rx="8" fill="#4a4a5c"/><rect x="150" y="90" width="16" height="84" rx="8" fill="#4a4a5c"/>';
+  TYPES.forEach(([t]) => { if (S.eq[t] != null) { const p = pos[t]; s += `<svg x="${p[0]}" y="${p[1]}" width="${p[2]}" height="${p[3]}" viewBox="0 0 100 100">${paths(ITEMS[S.eq[t]])}</svg>`; } });
+  return s + '</svg>';
+}
+function standView() {
+  const used = TYPES.filter(t => S.eq[t[0]] != null).length;
+  return `<div class="stand"><div class="man">${manSvg()}</div><div>${TYPES.map(([t, n]) => {
+    const it = S.eq[t] != null ? ITEMS[S.eq[t]] : null;
+    return `<button class="slot" data-act="slot" data-t="${t}"><span class="p">${it ? icon(it) : '+'}</span><span><b>${n}</b><small>${it ? it.n : 'пусто'}</small></span></button>`;
+  }).join('')}</div></div><p class="note"><b style="color:var(--lime)">Лук: ${R(lookCost())}</b> · слотов ${used}/8 · <b style="color:var(--pink)">+${lookBonus()}% к доходу</b></p>`;
+}
+function collView() {
+  const o = owned(), rest = ITEMS.filter(i => !S.own[i.id]).slice(0, UI.collN);
+  const cell = (i, lock) => `<div class="cell ${i.r} ${lock ? 'lock' : ''}">${icon(i)}${i.n}</div>`;
+  return `<div class="h">Вещи (${o.length}/${I
